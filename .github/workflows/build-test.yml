@@ -18,7 +18,7 @@ jobs:
       CACHE_DIR: ~/cache
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Cache
         uses: actions/cache@v4
@@ -43,7 +43,7 @@ jobs:
         run: sh compile.sh
 
       - name: Save Build Result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: frp
           path: |
