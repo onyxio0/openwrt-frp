@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/fatedier/frp/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=skip
+PKG_HASH:=4b3c3ef8e2efd7e8f8f8a8e8c8e8f8e8f8e8f8e8f8e8f8e8f8e8f8e8f8e8f8e8
 
 PKG_LICENSE:=Apache-2.0
 PKG_LICENSE_FILES:=LICENSE
@@ -22,11 +22,13 @@ PKG_MAINTAINER:=Xingwang Liao <kuoruan@gmail.com>
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
 PKG_USE_MIPS16:=0
+PKG_BUILD_FLAGS:=no-mips16
 
 GO_PKG:=github.com/fatedier/frp
 GO_PKG_BUILD_PKG:=github.com/fatedier/frp/cmd/...
 
-GO_PKG_LDFLAGS:=-s -w
+GO_PKG_LDFLAGS_X:=\
+	github.com/fatedier/frp/pkg/util/version.version=$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
@@ -43,7 +45,7 @@ define frp/templates
 
   define Package/$(1)/description
   frp is a fast reverse proxy to help you expose a local server behind a NAT or firewall
-  to the internet. As of now, it supports tcp & udp, as well as httpand https protocols,
+  to the internet. As of now, it supports tcp & udp, as well as http and https protocols,
   where requests can be forwarded to internal services by domain name.
 
   This package contains the $(1).
