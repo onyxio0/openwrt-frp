@@ -4,17 +4,34 @@ PKG_NAME:=frp
 PKG_VERSION:=0.65.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_linux_$(ARCH).tar.gz
+# 将 OpenWrt 架构映射到 frp 架构
+ifeq ($(ARCH),aarch64)
+  FRP_ARCH:=arm64
+else ifeq ($(ARCH),arm)
+  ifeq ($(findstring cortex-a7,$(CPU_TYPE)),cortex-a7)
+    FRP_ARCH:=arm
+  else
+    FRP_ARCH:=arm
+  endif
+else ifeq ($(ARCH),mipsel)
+  FRP_ARCH:=mipsle
+else ifeq ($(ARCH),mips)
+  FRP_ARCH:=mips
+else ifeq ($(ARCH),x86_64)
+  FRP_ARCH:=amd64
+else ifeq ($(ARCH),i386)
+  FRP_ARCH:=386
+else
+  $(error Unsupported architecture: $(ARCH))
+endif
+
+PKG_SOURCE:=frp_$(PKG_VERSION)_linux_$(FRP_ARCH).tar.gz
 PKG_SOURCE_URL:=https://github.com/fatedier/frp/releases/download/v$(PKG_VERSION)/
 PKG_HASH:=skip
 
 PKG_LICENSE:=Apache-2.0
 PKG_LICENSE_FILES:=LICENSE
 PKG_MAINTAINER:=Xingwang Liao <kuoruan@gmail.com>
-
-# 不需要编译
-PKG_BUILD_DEPENDS:=
-PKG_BUILD_PARALLEL:=0
 
 include $(INCLUDE_DIR)/package.mk
 
