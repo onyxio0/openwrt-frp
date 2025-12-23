@@ -49,7 +49,20 @@ fi
 cd "$dir"
 
 file "$sdk_dir/$sdk_file"
-tar -Jxf "$sdk_dir/$sdk_file" -C "$sdk_home_dir" --strip=1
+
+# Support both .tar.xz and .tar.zst formats
+case "$sdk_file" in
+	*.tar.zst)
+		tar --use-compress-program=unzstd -xf "$sdk_dir/$sdk_file" -C "$sdk_home_dir" --strip=1
+		;;
+	*.tar.xz)
+		tar -Jxf "$sdk_dir/$sdk_file" -C "$sdk_home_dir" --strip=1
+		;;
+	*)
+		echo "Unsupported archive format: $sdk_file"
+		exit 1
+		;;
+esac
 
 cd "$sdk_home_dir"
 
